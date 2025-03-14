@@ -1,0 +1,116 @@
+{
+  "format_version": "1.20.80",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "mm:gate",
+      "runtime_identifier": "armor_stand", //makes the shadow invisible
+      "is_spawnable": true,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "component_groups": {
+      "mm:open": {
+        "minecraft:variant": { "value": 1 }
+      },
+      "mm:closed": {
+        "minecraft:variant": { "value": 0 },
+        "minecraft:timer": {
+          "time": 1,
+          "looping": false,
+          "time_down_event": {
+            "event": "mm:particles_on_close",
+            "target": "self"
+          }
+        }
+      }
+    },
+    "components": {
+      "minecraft:collision_box": {
+        "width": 3,
+        "height": 3
+      },
+      "minecraft:custom_hit_test": {
+        "hitboxes": [
+          {
+            "pivot": [0, 0.0, 0],
+            "width": 3,
+            "height": 3
+          }
+        ]
+      },
+      "minecraft:type_family": {
+        "family": ["inanimate"]
+      },
+      "minecraft:knockback_resistance": {
+        "value": 1
+      },
+      "minecraft:pushable": {
+        "is_pushable": false,
+        "is_pushable_by_piston": false
+      },
+      "minecraft:persistent": {},
+      "minecraft:entity_sensor": {
+        "subsensors": [
+          {
+            "cooldown": 1,
+            "range": [10.0, 3.0],
+            "event": "mm:open",
+            "minimum_count": 1,
+            "event_filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "player"
+            }
+          },
+          {
+            "cooldown": 1,
+            "range": [10.0, 3.0],
+            "event": "mm:close",
+            "minimum_count": 0,
+            "maximum_count": 0,
+            "event_filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "player"
+            }
+          }
+        ]
+      }
+    },
+    "events": {
+      "mm:open": {
+        "filters": {
+          "test": "is_variant",
+          "operator": "==",
+          "value": 0
+        },
+        "add": { "component_groups": ["mm:open"] },
+        "remove": { "component_groups": ["mm:closed"] },
+        "queue_command": {
+          "command": [
+            "playsound gate.open @a ~ ~ ~",
+            "say @p welcome",
+            "particle mm:gate_particles ~ ~ ~"
+          ]
+        }
+      },
+      "mm:close": {
+        "filters": {
+          "test": "is_variant",
+          "operator": "==",
+          "value": 1
+        },
+        "add": { "component_groups": ["mm:closed"] },
+        "remove": { "component_groups": ["mm:open"] },
+        "queue_command": {
+          "command": "playsound gate.close @a ~ ~ ~"
+        }
+      },
+      "mm:particles_on_close": {
+        "queue_command": {
+          "command": ["say @p goodbye", "particle mm:gate_particles ~ ~ ~"]
+        }
+      }
+    }
+  }
+}
