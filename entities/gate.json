@@ -88,8 +88,8 @@
         "remove": { "component_groups": ["mm:closed"] },
         "queue_command": {
           "command": [
-            "playsound gate.open @a ~ ~ ~",
-            "say @p welcome",
+            "playsound use.ladder @a ~ ~ ~",
+            "say welcome @p",
             "particle mm:gate_particles ~ ~ ~"
           ]
         }
@@ -103,12 +103,12 @@
         "add": { "component_groups": ["mm:closed"] },
         "remove": { "component_groups": ["mm:open"] },
         "queue_command": {
-          "command": "playsound gate.close @a ~ ~ ~"
+          "command": "playsound use.ladder @a ~ ~ ~"
         }
       },
       "mm:particles_on_close": {
         "queue_command": {
-          "command": ["say @p goodbye", "particle mm:gate_particles ~ ~ ~"]
+          "command": ["say goodbye @p", "particle mm:gate_particles ~ ~ ~"]
         }
       }
     }
