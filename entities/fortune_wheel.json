@@ -72,14 +72,14 @@
         "add": { "component_groups": ["mm:spinning"] },
         "set_property": {
           "mm:prize": "math.floor(math.random(0, 8))"
-        },
-        "queue_command": {
-          "command": ["particle mm:gate_particles ~ ~ ~"]
         }
       },
       "mm:stop_spinning": {
         "remove": { "component_groups": ["mm:spinning"] },
-        "add": { "component_groups": ["mm:still"] }
+        "add": { "component_groups": ["mm:still"] },
+        "queue_command": {
+          "command": ["particle mm:wheel_spin ~ ~ ~"]
+        }
       }
     }
   }
