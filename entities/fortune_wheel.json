@@ -9,21 +9,20 @@
       "properties": {
         //property that determines where the wheel will stop
         "mm:prize": {
-          "type": "float",
-          "range": [-0.1, 7.1],
-          "default": 1.1,
+          "type": "int",
+          "range": [0, 5],
+          "default": 1,
           "client_sync": true
         }
       },
       "scripts": {
+        //variable that takes the value of mm:prize to be used in the animation
         "variables": {
           "variable.prize": "public",
           "client_sync": true
         },
         "initialize": ["variable.prize = 0;"],
-        "on_update": [
-          "variable.prize = query.has_property('mm:prize') ? query.property('mm:prize') : variable.prize;"
-        ]
+        "on_update": ["variable.prize = query.property('mm:prize');"]
       }
     },
     "component_groups": {
@@ -68,17 +67,94 @@
         "remove": { "component_groups": ["mm:still"] },
         "add": { "component_groups": ["mm:spinning"] },
         "set_property": {
-          "mm:prize": "math.floor(math.random(0, 8))"
+          "mm:prize": "math.floor(math.random(0, 4))"
         },
         "queue_command": {
           "command": ["playsound wheel.spin @a ~ ~ ~"]
         }
       },
       "mm:stop_spinning": {
-        "remove": { "component_groups": ["mm:spinning"] },
-        "add": { "component_groups": ["mm:still"] },
+        "sequence": [
+          {
+            "remove": { "component_groups": ["mm:spinning"] },
+            "add": { "component_groups": ["mm:still"] },
+            "queue_command": {
+              "command": ["particle mm:wheel_spin ~ ~ ~"]
+            }
+          },
+          {
+            "trigger": {
+              "event": "mm:reward0"
+            }
+          },
+          {
+            "trigger": {
+              "event": "mm:reward1"
+            }
+          },
+          {
+            "trigger": {
+              "event": "mm:reward2"
+            }
+          },
+          {
+            "trigger": {
+              "event": "mm:reward3"
+            }
+          }
+        ]
+      },
+      "mm:reward0": {
+        "filters": {
+          "test": "int_property",
+          "domain": "mm:prize",
+          "operator": "==",
+          "value": 0
+        },
         "queue_command": {
-          "command": ["particle mm:wheel_spin ~ ~ ~"]
+          "command": [
+            "give @p redstone 1",
+            "say @p redstone is usefull, i guess..."
+          ]
+        }
+      },
+      "mm:reward1": {
+        "filters": {
+          "test": "int_property",
+          "domain": "mm:prize",
+          "operator": "==",
+          "value": 1
+        },
+        "queue_command": {
+          "command": ["give @p diamond 1", "say @p JACKPOT, you got a diamond"]
+        }
+      },
+      "mm:reward2": {
+        "filters": {
+          "test": "int_property",
+          "domain": "mm:prize",
+          "operator": "==",
+          "value": 2
+        },
+        "queue_command": {
+          "command": [
+            "give @p gold_ingot 1",
+            "say @p you got a gold ingot, that's not bad"
+          ]
+        }
+      },
+      "mm:reward3": {
+        "filters": {
+          "test": "int_property",
+          "domain": "mm:prize",
+          "operator": "==",
+          "value": 3
+        },
+        "queue_command": {
+          "command": [
+            "give @p emerald 1",
+            "say @p emerald, the villagers would like that one"
+          ]
         }
       }
     }
