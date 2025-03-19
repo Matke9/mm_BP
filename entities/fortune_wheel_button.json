@@ -2,35 +2,17 @@
   "format_version": "1.20.80",
   "minecraft:entity": {
     "description": {
-      "identifier": "mm:fortune_wheel",
+      "identifier": "mm:fortune_button",
       "is_spawnable": true,
       "is_summonable": true,
-      "is_experimental": false,
-      "properties": {
-        //variable that determines where the wheel will stop
-        "mm:prize": {
-          "type": "float",
-          "range": [-0.1, 7.1],
-          "default": 1.1,
-          "client_sync": true
-        }
-      },
-      "scripts": {
-        "variables": {
-          "variable.prize": "public",
-          "client_sync": true
-        },
-        "initialize": ["variable.prize = 0;"],
-        "on_update": [
-          "variable.prize = query.has_property('mm:prize') ? query.property('mm:prize') : variable.prize;"
-        ]
-      }
+      "is_experimental": false
     },
     "component_groups": {
-      "mm:still": {
+      //the default state of the button before pressing it
+      "mm:up": {
         "minecraft:variant": { "value": 0 }
       },
-      "mm:spinning": {
+      "mm:down": {
         "minecraft:variant": { "value": 1 },
         "minecraft:timer": {
           //timer is used to return the entity to original state after the animation
@@ -67,19 +49,9 @@
           "test": "is_variant",
           "operator": "!=",
           "value": 1
-        },
-        "remove": { "component_groups": ["mm:still"] },
-        "add": { "component_groups": ["mm:spinning"] },
-        "set_property": {
-          "mm:prize": "math.floor(math.random(0, 8))"
-        },
-        "queue_command": {
-          "command": ["playsound wheel.spin @a ~ ~ ~"]
         }
       },
       "mm:stop_spinning": {
-        "remove": { "component_groups": ["mm:spinning"] },
-        "add": { "component_groups": ["mm:still"] },
         "queue_command": {
           "command": ["particle mm:wheel_spin ~ ~ ~"]
         }
