@@ -1,3 +1,4 @@
+#clears the scoreborard to reset the values
 scoreboard objectives remove Counter
 scoreboard objectives remove IsFighting
 scoreboard objectives remove WarriorCount

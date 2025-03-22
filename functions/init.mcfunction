@@ -1,7 +1,7 @@
-#remove anything laying around
+# Clean up the arena by removing any dropped items or arrows
 kill @e[type=item]
 kill @e[type=arrow]
-#teleport the player into the arena
+#teleport all players into the arena
 tp @a -26 -62 1
 
 #Tracks the number of warriors

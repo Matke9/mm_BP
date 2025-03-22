@@ -11,3 +11,7 @@ execute as @e[type=mm:weaker_warden] run playsound beacon.activate
 
 # Schedule the equip_skeletons function to run after 1 tick to avoid it not getting some skeletons
 schedule delay add boss_wave/equip_skeletons 1T append 
+
+# Increase the warrior count and old warrior count
+scoreboard players add counter WarriorCount 3
+scoreboard players add counter WarriorCountOld 3

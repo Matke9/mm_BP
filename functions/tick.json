@@ -1,3 +1,8 @@
 {
-  "values": ["check_death", "win_wave_check", "kill_check"]
+  // This script runs every tick
+  "values": [
+    "check_death", // Function to check if the player has died
+    "win_wave_check", // Function to check if the wave has been cleared
+    "kill_check" // Function to check and update kill counts
+  ]
 }
