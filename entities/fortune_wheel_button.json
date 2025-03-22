@@ -7,32 +7,29 @@
       "is_summonable": true,
       "is_experimental": false
     },
+
+    // Component groups for button states
     "component_groups": {
-      //the default state of the button before pressing it
       "mm:unpressed": {
-        "minecraft:variant": { "value": 0 }
+        "minecraft:variant": { "value": 0 } // Unpressed state
       },
       "mm:pressed": {
-        "minecraft:variant": { "value": 1 },
+        "minecraft:variant": { "value": 1 }, // Pressed state
         "minecraft:timer": {
-          //timer is used to make the button pressable again after the wheel stops spinning
-          "time": 4,
+          "time": 4, // Timer to reset the button after 4 seconds
           "looping": false,
           "time_down_event": {
-            "event": "mm:go_up",
+            "event": "mm:go_up", // Event to return to unpressed state
             "target": "self"
           }
         }
       }
     },
+
+    // Core components for the button
     "components": {
-      "minecraft:collision_box": {
-        "width": 0.2,
-        "height": 0.2
-      },
-      "minecraft:knockback_resistance": {
-        "value": 1
-      },
+      "minecraft:collision_box": { "width": 0.2, "height": 0.2 },
+      "minecraft:knockback_resistance": { "value": 1 },
       "minecraft:pushable": {
         "is_pushable": false,
         "is_pushable_by_piston": false
@@ -45,34 +42,27 @@
               "filters": {
                 "test": "is_variant",
                 "operator": "!=",
-                "value": 1
+                "value": 1 // Ensures the button is not already pressed
               },
-              "event": "mm:press"
+              "event": "mm:press" // Triggered when the button is pressed
             }
           }
         ]
       }
     },
+
+    // Events for button behavior
     "events": {
       "mm:press": {
-        "remove": {
-          "component_groups": ["mm:unpressed"]
-        },
-        "add": {
-          "component_groups": ["mm:pressed"]
-        },
+        "remove": { "component_groups": ["mm:unpressed"] }, // Switch to pressed state
+        "add": { "component_groups": ["mm:pressed"] },
         "queue_command": {
-          "command": ["event entity @e[rm=0,r=1,type=mm:fortune_wheel] mm:spin"]
+          "command": ["event entity @e[rm=0,r=1,type=mm:fortune_wheel] mm:spin"] // Trigger spin event on nearby fortune wheel
         }
       },
-      //return to the default state
       "mm:go_up": {
-        "remove": {
-          "component_groups": ["mm:pressed"]
-        },
-        "add": {
-          "component_groups": ["mm:unpressed"]
-        }
+        "remove": { "component_groups": ["mm:pressed"] }, // Return to unpressed state
+        "add": { "component_groups": ["mm:unpressed"] }
       }
     }
   }

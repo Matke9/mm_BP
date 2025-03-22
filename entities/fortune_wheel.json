@@ -7,7 +7,7 @@
       "is_summonable": true,
       "is_experimental": false,
       "properties": {
-        //property that determines where the wheel will stop
+        // Property to determine where the wheel stops (0-3)
         "mm:prize": {
           "type": "int",
           "range": [0, 5],
@@ -16,7 +16,7 @@
         }
       },
       "scripts": {
-        //variable that takes the value of mm:prize to be used in the animation
+        // Syncs the prize value for use in animations
         "variables": {
           "variable.prize": "public",
           "client_sync": true
@@ -26,84 +26,67 @@
       }
     },
     "component_groups": {
+      // Default state of the wheel (not spinning)
       "mm:still": {
         "minecraft:variant": { "value": 0 }
       },
+      // State when the wheel is spinning
       "mm:spinning": {
         "minecraft:variant": { "value": 1 },
         "minecraft:timer": {
-          //timer is used to return the entity to original state after the animation
-          "time": 4,
+          "time": 4, // Duration of the spin animation
           "looping": false,
           "time_down_event": {
-            "event": "mm:stop_spinning",
+            "event": "mm:stop_spinning", // Event to stop spinning
             "target": "self"
           }
         }
       }
     },
     "components": {
-      "minecraft:collision_box": {
-        "width": 0.5,
-        "height": 1
-      },
-      "minecraft:knockback_resistance": {
-        "value": 1
-      },
+      "minecraft:collision_box": { "width": 0.5, "height": 1 },
+      "minecraft:knockback_resistance": { "value": 1 },
       "minecraft:pushable": {
         "is_pushable": false,
         "is_pushable_by_piston": false
       },
-      "minecraft:persistent": {}
+      "minecraft:persistent": {} // Ensures the entity persists
     },
     "events": {
+      // Event to start spinning the wheel
       "mm:spin": {
-        //we dont want to allow starting the spin if it is already spinning
         "filters": {
           "test": "is_variant",
           "operator": "!=",
-          "value": 1
+          "value": 1 // Prevents spinning if already spinning
         },
         "remove": { "component_groups": ["mm:still"] },
         "add": { "component_groups": ["mm:spinning"] },
         "set_property": {
-          "mm:prize": "math.floor(math.random(0, 4))"
+          "mm:prize": "math.floor(math.random(0, 4))" // Randomly sets the prize
         },
         "queue_command": {
-          "command": ["playsound wheel.spin @a ~ ~ ~"]
+          "command": ["playsound wheel.spin @a ~ ~ ~"] // Plays spin sound
         }
       },
+      // Event to stop spinning and trigger rewards
       "mm:stop_spinning": {
         "sequence": [
           {
             "remove": { "component_groups": ["mm:spinning"] },
             "add": { "component_groups": ["mm:still"] },
             "queue_command": {
-              "command": ["particle mm:wheel_spin ~ ~ ~"]
+              "command": ["particle mm:wheel_spin ~ ~ ~"] // Spawns particles
             }
           },
-          {
-            "trigger": {
-              "event": "mm:reward0"
-            }
-          },
-          {
-            "trigger": {
-              "event": "mm:reward1"
-            }
-          },
-          {
-            "trigger": {
-              "event": "mm:reward2"
-            }
-          },
-          {
-            "trigger": {
-              "event": "mm:reward3"
-            }
-          }
+          // Triggers reward events based on the prize value
+          { "trigger": { "event": "mm:reward0" } },
+          { "trigger": { "event": "mm:reward1" } },
+          { "trigger": { "event": "mm:reward2" } },
+          { "trigger": { "event": "mm:reward3" } }
         ]
       },
+      // Reward events based on the prize value
       "mm:reward0": {
         "filters": {
           "test": "int_property",
@@ -114,7 +97,7 @@
         "queue_command": {
           "command": [
             "give @p redstone 1",
-            "say @p redstone is usefull, i guess..."
+            "title @p actionbar redstone is useful, I guess..."
           ]
         }
       },
@@ -126,7 +109,10 @@
           "value": 1
         },
         "queue_command": {
-          "command": ["give @p diamond 1", "say @p JACKPOT, you got a diamond"]
+          "command": [
+            "give @p diamond 1",
+            "title @p actionbar JACKPOT, you got a diamond"
+          ]
         }
       },
       "mm:reward2": {
@@ -139,7 +125,7 @@
         "queue_command": {
           "command": [
             "give @p gold_ingot 1",
-            "say @p you got a gold ingot, that's not bad"
+            "title @p actionbar you got a gold ingot, that's not bad"
           ]
         }
       },
@@ -153,7 +139,7 @@
         "queue_command": {
           "command": [
             "give @p emerald 1",
-            "say @p emerald, the villagers would like that one"
+            "title @p actionbar emerald, the villagers would like that one"
           ]
         }
       }

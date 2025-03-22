@@ -3,32 +3,31 @@
   "minecraft:entity": {
     "description": {
       "identifier": "mm:gate",
-      "runtime_identifier": "armor_stand", //makes the shadow invisible
+      "runtime_identifier": "armor_stand", // Makes the shadow invisible
       "is_spawnable": true,
       "is_summonable": true,
       "is_experimental": false
     },
     "component_groups": {
+      // State when the gate is open
       "mm:open": {
         "minecraft:variant": { "value": 1 }
       },
+      // State when the gate is closed
       "mm:closed": {
         "minecraft:variant": { "value": 0 },
         "minecraft:timer": {
-          "time": 1,
+          "time": 1, // Delay before triggering particles on close
           "looping": false,
           "time_down_event": {
-            "event": "mm:particles_on_close",
+            "event": "mm:particles_on_close", // Event for particles when closing
             "target": "self"
           }
         }
       }
     },
     "components": {
-      "minecraft:collision_box": {
-        "width": 3,
-        "height": 3
-      },
+      "minecraft:collision_box": { "width": 3, "height": 3 }, // Collision box size
       "minecraft:custom_hit_test": {
         "hitboxes": [
           {
@@ -38,76 +37,80 @@
           }
         ]
       },
-      "minecraft:knockback_resistance": {
-        "value": 1
-      },
+      "minecraft:knockback_resistance": { "value": 1 }, // Prevents knockback
       "minecraft:pushable": {
         "is_pushable": false,
         "is_pushable_by_piston": false
-      },
-      "minecraft:persistent": {},
+      }, // Cannot be pushed
+      "minecraft:persistent": {}, // Ensures the entity persists
       "minecraft:entity_sensor": {
         "subsensors": [
-          //check if a player is in the range
+          // Detects if a player is within range to open the gate
           {
             "cooldown": 1,
-            "range": [10.0, 3.0],
-            "event": "mm:open",
-            "minimum_count": 1,
+            "range": [10.0, 3.0], // Range for detection (x, y, z)
+            "event": "mm:open", // Event to trigger when a player is detected
+            "minimum_count": 1, // At least 1 player required
             "event_filters": {
               "test": "is_family",
               "subject": "other",
-              "value": "player"
+              "value": "player" // Filters for players only
             }
           },
-          //check if there is exactly 0 players in the range
+          // Detects if no players are within range to close the gate
           {
             "cooldown": 1,
-            "range": [10.0, 3.0],
-            "event": "mm:close",
-            "minimum_count": 0,
-            "maximum_count": 0,
+            "range": [10.0, 3.0], // Range for detection (x, y, z)
+            "event": "mm:close", // Event to trigger when no players are detected
+            "minimum_count": 0, // No players required
+            "maximum_count": 0, // Exactly 0 players
             "event_filters": {
               "test": "is_family",
               "subject": "other",
-              "value": "player"
+              "value": "player" // Filters for players only
             }
           }
         ]
       }
     },
     "events": {
+      // Event to open the gate
       "mm:open": {
         "filters": {
           "test": "is_variant",
           "operator": "==",
-          "value": 0
+          "value": 0 // Ensures the gate is closed before opening
         },
-        "add": { "component_groups": ["mm:open"] },
-        "remove": { "component_groups": ["mm:closed"] },
+        "add": { "component_groups": ["mm:open"] }, // Sets the gate to open state
+        "remove": { "component_groups": ["mm:closed"] }, // Removes the closed state
         "queue_command": {
           "command": [
-            "playsound use.ladder @a ~ ~ ~",
-            "say welcome @p",
-            "particle mm:gate_particles ~ ~ ~"
+            "playsound use.ladder @a ~ ~ ~", // Plays a sound
+            "title @p actionbar Welcome", // Displays a welcome message
+            "particle mm:gate_particles ~ ~ ~" // Spawns particles
           ]
         }
       },
+      // Event to close the gate
       "mm:close": {
         "filters": {
           "test": "is_variant",
           "operator": "==",
-          "value": 1
+          "value": 1 // Ensures the gate is open before closing
         },
-        "add": { "component_groups": ["mm:closed"] },
-        "remove": { "component_groups": ["mm:open"] },
+        "add": { "component_groups": ["mm:closed"] }, // Sets the gate to closed state
+        "remove": { "component_groups": ["mm:open"] }, // Removes the open state
         "queue_command": {
-          "command": "playsound use.ladder @a ~ ~ ~"
+          "command": "playsound use.ladder @a ~ ~ ~" // Plays a sound
         }
       },
+      // Event to trigger particles when the gate closes
       "mm:particles_on_close": {
         "queue_command": {
-          "command": ["say goodbye @p", "particle mm:gate_particles ~ ~ ~"]
+          "command": [
+            "title @p actionbar Goodbye", // Displays a goodbye message
+            "particle mm:gate_particles ~ ~ ~" // Spawns particles
+          ]
         }
       }
     }
