@@ -14,6 +14,5 @@ give @a minecraft:diamond_block 10
 # Reset the scoreboard and stop all sounds
 function clear_scoreboard  
 stopsound @a  
-
 # Play a sound effect to celebrate the victory
-playsound block.bell.hit  
+playsound block.bell.hit @a

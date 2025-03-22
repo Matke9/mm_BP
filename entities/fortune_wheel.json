@@ -87,7 +87,7 @@
         ]
       },
       // Reward events based on the prize value
-      "mm:reward0": {
+      "mm:reward1": {
         "filters": {
           "test": "int_property",
           "domain": "mm:prize",
@@ -96,22 +96,8 @@
         },
         "queue_command": {
           "command": [
-            "give @p redstone 1",
-            "title @p actionbar redstone is useful, I guess..."
-          ]
-        }
-      },
-      "mm:reward1": {
-        "filters": {
-          "test": "int_property",
-          "domain": "mm:prize",
-          "operator": "==",
-          "value": 1
-        },
-        "queue_command": {
-          "command": [
-            "give @p diamond 1",
-            "title @p actionbar JACKPOT, you got a diamond"
+            "give @p emerald 1",
+            "title @p actionbar emerald, the villagers would like that one"
           ]
         }
       },
@@ -120,12 +106,12 @@
           "test": "int_property",
           "domain": "mm:prize",
           "operator": "==",
-          "value": 2
+          "value": 1
         },
         "queue_command": {
           "command": [
-            "give @p gold_ingot 1",
-            "title @p actionbar you got a gold ingot, that's not bad"
+            "give @p redstone 1",
+            "title @p actionbar redstone is useful, I guess..."
           ]
         }
       },
@@ -134,12 +120,26 @@
           "test": "int_property",
           "domain": "mm:prize",
           "operator": "==",
+          "value": 2
+        },
+        "queue_command": {
+          "command": [
+            "give @p diamond 1",
+            "title @p actionbar JACKPOT, you got a diamond"
+          ]
+        }
+      },
+      "mm:reward0": {
+        "filters": {
+          "test": "int_property",
+          "domain": "mm:prize",
+          "operator": "==",
           "value": 3
         },
         "queue_command": {
           "command": [
-            "give @p emerald 1",
-            "title @p actionbar emerald, the villagers would like that one"
+            "give @p gold_ingot 1",
+            "title @p actionbar you got a gold ingot, that's not bad"
           ]
         }
       }
