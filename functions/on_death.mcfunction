@@ -1,11 +1,12 @@
-# Pošalji poruku igraču
-title @a title You lost! Teleporting back to lobby...
-
-# Resetuj kill counter (ako želiš)
-scoreboard players set @a killCount 0
-
-# Teleportuj igrača u lobby (zameni X Y Z koordinatama spawn tačke)
+title @a title §7You lost!
+#teleport back to the button
 teleport @a -26 -55 14
-
-# Opcionalno: Pusti zvuk i/ili čestice
 playsound random.explode @a ~ ~ ~ 1 1
+#reset the scoreboard
+function clear_scoreboard
+kill @e[type=item]
+kill @e[type=arrow]
+kill @e[name="warrior"]
+kill @e[name="Minion"]
+kill @e[name="Boss"]
+stopsound @a

@@ -1,0 +1,1 @@
+execute if score counter WarriorCountOld > counter WarriorCount run function on_kill
